@@ -26,27 +26,30 @@ app = Client(
 
 def home_keyboard():
     return InlineKeyboardMarkup([
-        [InlineKeyboardButton("➕ Add cookies.txt", callback_data="cookies:add"),
-         InlineKeyboardButton("🗑 Remove cookies.txt", callback_data="cookies:remove")],
-        [InlineKeyboardButton("📥 Leech/Mirror (send /leech <url>)", callback_data="noop")],
+        [
+            InlineKeyboardButton("➕ Add cookies.txt", callback_data="cookies:add"),
+            InlineKeyboardButton("🗑 Remove cookies.txt", callback_data="cookies:remove")
+        ],
+        [
+            InlineKeyboardButton("📥 Leech/Mirror (send /leech <url>)", callback_data="noop")
+        ]
     ])
 
 @app.on_message(filters.command("start"))
 async def start_cmd(_, m: Message):
     ensure_dirs()
     await m.reply_text(
-        "👋 **Welcome to Colab Leech Bot**\n\n"
+        "👋 Welcome to Colab Leech Bot\n\n"
         "✅ Features: quality selection, progress bar, cookies, cancel button.\n"
-        "▶ Usage: `/leech <url>`",
+        "▶ Usage: /leech <url>",
         reply_markup=home_keyboard(),
-        disable_web_page_preview=True,
+        disable_web_page_preview=True
     )
 
 @app.on_callback_query(filters.regex("^noop$"))
 async def ignore_noop(_, cq):
     await cq.answer("Use /leech <url> to start.", show_alert=False)
 
-# register handlers
 register_cookie_handlers(app)
 register_leech_handlers(app)
 
